@@ -17,5 +17,4 @@
 
 - (IBAction)loginButtonPressed:(UIButton *)sender;
 
-- (IBAction)reloadTableViewButton:(UIButton *)sender;
 @end
