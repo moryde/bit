@@ -13,6 +13,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    
+    
     return YES;
 }
 							
@@ -41,6 +46,33 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    self.deviceToken = deviceToken;
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+	NSLog(@"Failed to get token, error: %@", error);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    UIApplicationState state = [application applicationState];
+    if (state == UIApplicationStateActive) {
+        NSString *cancelTitle = @"Close";
+        NSString *showTitle = @"Show";
+        NSString *message = [[userInfo valueForKey:@"aps"] valueForKey:@"alert"];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Some title"
+                                                            message:message
+                                                           delegate:self
+                                                  cancelButtonTitle:cancelTitle
+                                                  otherButtonTitles:showTitle, nil];
+        [alertView show];
+    } else {
+        //Do stuff that you would do if the application was not active
+    }
 }
 
 @end

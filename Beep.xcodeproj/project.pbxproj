@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63043E7A18D8FECF00D071A4 /* CreateUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63043E7918D8FECF00D071A4 /* CreateUserViewController.m */; };
 		630E593218D63855000352AD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630E593118D63855000352AD /* Foundation.framework */; };
 		630E593418D63855000352AD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630E593318D63855000352AD /* CoreGraphics.framework */; };
 		630E593618D63855000352AD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630E593518D63855000352AD /* UIKit.framework */; };
@@ -22,6 +23,10 @@
 		630E595618D63855000352AD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630E593518D63855000352AD /* UIKit.framework */; };
 		630E595E18D63855000352AD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 630E595C18D63855000352AD /* InfoPlist.strings */; };
 		630E596018D63855000352AD /* BeepTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630E595F18D63855000352AD /* BeepTests.m */; };
+		6360D03D18D7A3AA009A3377 /* BackendConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6360D03C18D7A3AA009A3377 /* BackendConnection.m */; };
+		638D7EA318D9C35B000A9BEC /* AddFriendTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 638D7EA218D9C35B000A9BEC /* AddFriendTableViewController.m */; };
+		63E5A3E618D859DD00B5B4DC /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A3E518D859DD00B5B4DC /* LoginViewController.m */; };
+		9B9FD4FBED8D4477976F44FA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C15FEC2DB845689EBB71FE /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1BEFDB9C14524017A51EFFAE /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		63043E7818D8FECF00D071A4 /* CreateUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateUserViewController.h; sourceTree = "<group>"; };
+		63043E7918D8FECF00D071A4 /* CreateUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateUserViewController.m; sourceTree = "<group>"; };
 		630E592E18D63855000352AD /* Beep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Beep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		630E593118D63855000352AD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		630E593318D63855000352AD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -55,6 +63,13 @@
 		630E595B18D63855000352AD /* BeepTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BeepTests-Info.plist"; sourceTree = "<group>"; };
 		630E595D18D63855000352AD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		630E595F18D63855000352AD /* BeepTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BeepTests.m; sourceTree = "<group>"; };
+		6360D03B18D7A3AA009A3377 /* BackendConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackendConnection.h; sourceTree = "<group>"; };
+		6360D03C18D7A3AA009A3377 /* BackendConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackendConnection.m; sourceTree = "<group>"; };
+		638D7EA118D9C35B000A9BEC /* AddFriendTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendTableViewController.h; sourceTree = "<group>"; };
+		638D7EA218D9C35B000A9BEC /* AddFriendTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendTableViewController.m; sourceTree = "<group>"; };
+		63E5A3E418D859DD00B5B4DC /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		63E5A3E518D859DD00B5B4DC /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		81C15FEC2DB845689EBB71FE /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +80,7 @@
 				630E593418D63855000352AD /* CoreGraphics.framework in Frameworks */,
 				630E593618D63855000352AD /* UIKit.framework in Frameworks */,
 				630E593218D63855000352AD /* Foundation.framework in Frameworks */,
+				9B9FD4FBED8D4477976F44FA /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +104,7 @@
 				630E595918D63855000352AD /* BeepTests */,
 				630E593018D63855000352AD /* Frameworks */,
 				630E592F18D63855000352AD /* Products */,
+				1BEFDB9C14524017A51EFFAE /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,6 +124,7 @@
 				630E593318D63855000352AD /* CoreGraphics.framework */,
 				630E593518D63855000352AD /* UIKit.framework */,
 				630E595318D63855000352AD /* XCTest.framework */,
+				81C15FEC2DB845689EBB71FE /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -117,10 +135,18 @@
 				630E594018D63855000352AD /* AppDelegate.h */,
 				630E594118D63855000352AD /* AppDelegate.m */,
 				630E594318D63855000352AD /* Main_iPhone.storyboard */,
-				630E594618D63855000352AD /* Main_iPad.storyboard */,
+				638D7EA118D9C35B000A9BEC /* AddFriendTableViewController.h */,
+				638D7EA218D9C35B000A9BEC /* AddFriendTableViewController.m */,
+				63E5A3E418D859DD00B5B4DC /* LoginViewController.h */,
+				63E5A3E518D859DD00B5B4DC /* LoginViewController.m */,
 				630E594918D63855000352AD /* ViewController.h */,
 				630E594A18D63855000352AD /* ViewController.m */,
+				6360D03B18D7A3AA009A3377 /* BackendConnection.h */,
+				6360D03C18D7A3AA009A3377 /* BackendConnection.m */,
+				63043E7818D8FECF00D071A4 /* CreateUserViewController.h */,
+				63043E7918D8FECF00D071A4 /* CreateUserViewController.m */,
 				630E594C18D63855000352AD /* Images.xcassets */,
+				630E594618D63855000352AD /* Main_iPad.storyboard */,
 				630E593818D63855000352AD /* Supporting Files */,
 			);
 			path = Beep;
@@ -162,9 +188,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 630E596318D63855000352AD /* Build configuration list for PBXNativeTarget "Beep" */;
 			buildPhases = (
+				807D1ADE0F7C43ACBE281A91 /* Check Pods Manifest.lock */,
 				630E592A18D63855000352AD /* Sources */,
 				630E592B18D63855000352AD /* Frameworks */,
 				630E592C18D63855000352AD /* Resources */,
+				EA29E35928C04A3497271D23 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -202,6 +230,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Ydefeldt;
 				TargetAttributes = {
+					630E592D18D63855000352AD = {
+						DevelopmentTeam = 6V8W5E58Z8;
+					};
 					630E595118D63855000352AD = {
 						TestTargetID = 630E592D18D63855000352AD;
 					};
@@ -248,14 +279,51 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		807D1ADE0F7C43ACBE281A91 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		EA29E35928C04A3497271D23 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		630E592A18D63855000352AD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				638D7EA318D9C35B000A9BEC /* AddFriendTableViewController.m in Sources */,
 				630E594B18D63855000352AD /* ViewController.m in Sources */,
 				630E594218D63855000352AD /* AppDelegate.m in Sources */,
+				6360D03D18D7A3AA009A3377 /* BackendConnection.m in Sources */,
+				63043E7A18D8FECF00D071A4 /* CreateUserViewController.m in Sources */,
 				630E593E18D63855000352AD /* main.m in Sources */,
+				63E5A3E618D859DD00B5B4DC /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,26 +455,34 @@
 		};
 		630E596418D63855000352AD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1BEFDB9C14524017A51EFFAE /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Beep/Beep-Prefix.pch";
 				INFOPLIST_FILE = "Beep/Beep-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "0B2AFC72-276A-458F-BEC5-079004053734";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		630E596518D63855000352AD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1BEFDB9C14524017A51EFFAE /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Morten Ydefeldt (8NPA8QDUU9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Beep/Beep-Prefix.pch";
 				INFOPLIST_FILE = "Beep/Beep-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "0B2AFC72-276A-458F-BEC5-079004053734";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -470,6 +546,7 @@
 				630E596518D63855000352AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		630E596618D63855000352AD /* Build configuration list for PBXNativeTarget "BeepTests" */ = {
 			isa = XCConfigurationList;
@@ -478,6 +555,7 @@
 				630E596818D63855000352AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
