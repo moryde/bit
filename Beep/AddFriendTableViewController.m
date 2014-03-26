@@ -51,9 +51,6 @@
     self.backendConnection = [BackendConnection getInstance];
     [self.backendConnection setDelegate:self];
     [self.backendConnection prepareToGetAllUsers];
-    NSURL *url = [NSURL URLWithString:@"http://midtfynsbryghus.mmd.eal.dk/group5/sveinn.jpg"];
-    NSData *imageData = [NSData dataWithContentsOfURL:url];
-    self.image = [UIImage imageWithData:imageData];
     [self.searchUsers setDelegate:self];
 }
 
@@ -91,7 +88,7 @@
     cell.textLabel.text = userName;
     
 
-    [cell.imageView setImage:self.image];
+    [cell.imageView setImage:self.backendConnection.standardImage];
     
     return cell;
 }

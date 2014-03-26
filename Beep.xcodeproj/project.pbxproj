@@ -25,6 +25,7 @@
 		630E596018D63855000352AD /* BeepTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630E595F18D63855000352AD /* BeepTests.m */; };
 		6360D03D18D7A3AA009A3377 /* BackendConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6360D03C18D7A3AA009A3377 /* BackendConnection.m */; };
 		638D7EA318D9C35B000A9BEC /* AddFriendTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 638D7EA218D9C35B000A9BEC /* AddFriendTableViewController.m */; };
+		63BD713B18E2545300F83AC1 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 63BD713918E2545300F83AC1 /* Model.xcdatamodeld */; };
 		63E5A3E618D859DD00B5B4DC /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A3E518D859DD00B5B4DC /* LoginViewController.m */; };
 		9B9FD4FBED8D4477976F44FA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C15FEC2DB845689EBB71FE /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -67,6 +68,7 @@
 		6360D03C18D7A3AA009A3377 /* BackendConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackendConnection.m; sourceTree = "<group>"; };
 		638D7EA118D9C35B000A9BEC /* AddFriendTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendTableViewController.h; sourceTree = "<group>"; };
 		638D7EA218D9C35B000A9BEC /* AddFriendTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendTableViewController.m; sourceTree = "<group>"; };
+		63BD713A18E2545300F83AC1 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		63E5A3E418D859DD00B5B4DC /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		63E5A3E518D859DD00B5B4DC /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		81C15FEC2DB845689EBB71FE /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +102,7 @@
 		630E592518D63855000352AD = {
 			isa = PBXGroup;
 			children = (
+				63BD713918E2545300F83AC1 /* Model.xcdatamodeld */,
 				630E593718D63855000352AD /* Beep */,
 				630E595918D63855000352AD /* BeepTests */,
 				630E593018D63855000352AD /* Frameworks */,
@@ -320,6 +323,7 @@
 				638D7EA318D9C35B000A9BEC /* AddFriendTableViewController.m in Sources */,
 				630E594B18D63855000352AD /* ViewController.m in Sources */,
 				630E594218D63855000352AD /* AppDelegate.m in Sources */,
+				63BD713B18E2545300F83AC1 /* Model.xcdatamodeld in Sources */,
 				6360D03D18D7A3AA009A3377 /* BackendConnection.m in Sources */,
 				63043E7A18D8FECF00D071A4 /* CreateUserViewController.m in Sources */,
 				630E593E18D63855000352AD /* main.m in Sources */,
@@ -558,6 +562,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		63BD713918E2545300F83AC1 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				63BD713A18E2545300F83AC1 /* Model.xcdatamodel */,
+			);
+			currentVersion = 63BD713A18E2545300F83AC1 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 630E592618D63855000352AD /* Project object */;
 }

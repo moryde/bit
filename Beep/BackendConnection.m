@@ -20,13 +20,39 @@ static BackendConnection *singletonInstance;
     if (singletonInstance == nil) {
         singletonInstance = [[super alloc] init];
     }
+    
     return singletonInstance;
 }
 
+- (UIImage*) preparePicture {
+    
+    NSURL *url = [NSURL URLWithString:@"http://midtfynsbryghus.mmd.eal.dk/group5/sveinn.jpg"];
+    NSData *imageData = [NSData dataWithContentsOfURL:url];
+    self.standardImage = [UIImage imageWithData:imageData];
+    return self.standardImage;
+}
+
+- (void) responsTofriendRequestFromFriend:(NSDictionary*)friend
+                             withResponse:(BOOL)response {
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"myID": [self.user objectForKey:@"id"], @"friendID": [friend objectForKey:@"id"]};
+    [manager POST:@"http://www.ydefeldt.com/beep/acceptFriendRequest.php" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Accepted Friend Request");
+        NSLog([responseObject description]);
+        [self prepareDataForLoggedInUser];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"FriendRequestAcceptionError");
+        NSLog(@"Error: %@", error);
+    }];
+
+    
+}
+
 -(NSDictionary*)loginWithUsername:(NSString*)username password:(NSString*)password {
+    [self preparePicture];
     self.user = [[NSDictionary alloc] init];
-
-
+    
     NSDictionary *parameters = @{@"password": password, @"username": username};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -79,13 +105,16 @@ static BackendConnection *singletonInstance;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     [manager POST:@"http://www.ydefeldt.com/beep/getFriendRequests.php" parameters:parameters success:^(AFHTTPRequestOperation *opration, id responseObject){
-        NSLog([responseObject description]);
-        self.friendRequests = [[NSMutableArray alloc] init];
-        self.friendRequests = responseObject;
-        NSLog(@"LOOOOL");
-        NSLog(@"friend requests fetched");
-        NSLog([responseObject description]);
-        [self.delegate getInitialData:self.friendRequests];
+        
+        if ([responseObject isKindOfClass:[NSArray class]]) {
+            self.friendRequests = [[NSMutableArray alloc] init];
+            self.friendRequests = responseObject;
+            [self.delegate getInitialData:self.friendRequests];
+        } else {
+            self.friendRequests = nil;
+            NSString *error = [responseObject objectForKey:@"error"];
+            NSLog(error);
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"failed to get friendRequests");
         NSLog([error description]);
@@ -103,7 +132,6 @@ static BackendConnection *singletonInstance;
         [manager POST:@"http://www.ydefeldt.com/beep/getFriends.php" parameters:parameters success:^(AFHTTPRequestOperation *opration, id responseObject){
             self.friends = [[NSMutableArray alloc] init];
             self.friends = responseObject;
-            
             [self.delegate getInitialData:self.friends];
             NSLog(@"FriendsReady");
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -146,7 +174,7 @@ static BackendConnection *singletonInstance;
 -(void)sendNotificationToUserAtIndexPath:(NSIndexPath*)indexPath {
     if (self.user) {
         NSDictionary *userToSendNotification = [self.friends objectAtIndex:indexPath.row];
-        NSDictionary *parameters = @{@"sender": [self.user objectForKey:@"id"], @"receiver": [userToSendNotification objectForKey:@"id"]};
+        NSDictionary *parameters = @{@"sender": [self.user objectForKey:@"id"], @"receiver": [userToSendNotification objectForKey:@"id"], @"messageType": @"0"};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager POST:@"http://www.ydefeldt.com/beep/sendMessage.php" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"Success");

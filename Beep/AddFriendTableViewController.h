@@ -14,5 +14,4 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchUsers;
 @property (nonatomic) NSArray *allUsers;
 @property (nonatomic) BackendConnection *backendConnection;
-@property (nonatomic) UIImage *image;
 @end

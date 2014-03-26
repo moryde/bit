@@ -23,6 +23,7 @@
 @property (nonatomic) NSDictionary *user;
 @property (nonatomic) NSArray *allUsers;
 @property (nonatomic) NSArray *friendRequests;
+@property (nonatomic) UIImage *standardImage;
 
 - (NSDictionary*)loginWithUsername:(NSString*)username password:(NSString*)password;
 
@@ -31,6 +32,7 @@
 - (void) createNewUserWithUsername: (NSString*)userName password: (NSString*)password deviceToken: (NSString*)deviceToken;
 - (void)prepareToGetAllUsers;
 - (void)sendFriendRequestTo:(NSString*)receiverID;
+- (void) responsTofriendRequestFromFriend:(NSDictionary*)friend withResponse:(BOOL)response;
 
 @end
 
