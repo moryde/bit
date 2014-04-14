@@ -374,7 +374,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="kriand">
+                                    <fragment content="123">
                                         <attributes>
                                             <color key="NSColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue"/>

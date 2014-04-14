@@ -126,8 +126,9 @@ static BackendConnection *singletonInstance;
     
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager POST:@"http://www.ydefeldt.com/beep/getUsers.php" parameters:nil success:^(AFHTTPRequestOperation *opration, id responseObject){
+            
             for (User* user in responseObject) {
-                [self.allUsers addObject:user];
+                [self.allUsers addObject:[[User alloc] initWithUserDictionary:user]];
             }
             [self.delegate getAllUsers:self.allUsers];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
