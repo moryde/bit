@@ -88,23 +88,37 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"user" forIndexPath:indexPath];
+
     Friend *friend = [self.backendConnection.loggedInUser.friends objectAtIndex:indexPath.row];
-    [cell.detailTextLabel setText:@"Friend"];
-    [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
-    [cell.textLabel setText: friend.username];
+    if (friend.type == 1) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friend" forIndexPath:indexPath];
+        [cell.detailTextLabel setText:@"Friend"];
+        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
+        [cell.textLabel setText: friend.userName];
+        return cell;
+        
+    } else if (friend.type == 0){
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friendRequest" forIndexPath:indexPath];
+        [cell.detailTextLabel setText:@"Friend"];
+        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
+        [cell.textLabel setText: friend.userName];
+        return cell;
+
+    }
     
-    return cell;
+    return nil;
 
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    Friend *friend = [self.backendConnection.loggedInUser.friends objectAtIndex:indexPath.row];
     
-    if (indexPath.section == 1) {
-        [self.backendConnection responsTofriendRequestFromFriend:[self.backendConnection.friendRequests objectAtIndex:indexPath.row] withResponse:YES];
-    } else {
-        [self.backendConnection sendNotificationToUserAtIndexPath:indexPath];
+    if (friend.type == 0) {
+        [friend acceptFriendRequest];
+    } else if (friend.type == 1){
+        [friend sendNotification];
     }
+
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

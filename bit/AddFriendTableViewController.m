@@ -8,6 +8,7 @@
 
 #import "AddFriendTableViewController.h"
 #import "ViewController.h"
+#import "User.h"
 
 @interface AddFriendTableViewController () <BackendConnectionDelegate>
 
@@ -64,13 +65,13 @@
 #pragma mark - Table view data source
 
 -(void)getAllUsers:(NSArray *)allUsers {
-    self.allUsers = allUsers;
     [self.tableView reloadData];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    [self.backendConnection sendFriendRequestTo:[[self.allUsers objectAtIndex:indexPath.row] valueForKey:@"id"]];
+    User *user = [self.backendConnection.allUsers objectAtIndex:indexPath.row];
+    [user sendFriendRequest];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -88,7 +89,7 @@
     cell.textLabel.text = userName;
     
 
-    [cell.imageView setImage:self.backendConnection.standardImage];
+    //[cell.imageView setImage:self.backendConnection.standardImage];
     
     return cell;
 }

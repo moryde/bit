@@ -8,18 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
-
+@class BackendConnection;
 
 @interface User : NSObject {
     
 }
+@property (nonatomic) BackendConnection* backendConnection;
 
-@property (nonatomic) NSInteger userID;
+@property (nonatomic) NSString *userID;
 @property (nonatomic) NSString *userName;
 @property (nonatomic) NSMutableArray *friends;
 @property (nonatomic) UIImage *userImage;
 
 
-- (User*)initWithResponseObject:(NSDictionary*)responseObject;
+- (instancetype)initWithUserDictionary:(NSDictionary*)userDictionary;
 - (int)countTypeOfFriends;
+- (void)sendFriendRequest;
+
 @end

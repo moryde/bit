@@ -50,7 +50,8 @@
     self.backendConnection = [BackendConnection getInstance];
     [self.backendConnection setDelegate:self];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-
+    [self.passwordTextField setSecureTextEntry:NO];
+    [self.passwordTextField setText:@"Password"];
     NSString *username = [prefs stringForKey:@"username"];
     
     if (username) {
@@ -102,7 +103,26 @@
 
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField.tag == 1) {
+        [textField setSecureTextEntry:YES];
+    }
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField {
+    if ([textField.text isEqualToString:@""]) {
+        if (textField.tag == 0) {
+            [textField setText:@"Username"];
+        } else if (textField.tag == 1) {
+            [textField setSecureTextEntry:NO];
+            [textField setText:@"Password"];
+        }
+    }
+}
+
 -(void)userLoggedIn:(User *)user {
+    
+    if (user) {
     [self performSegueWithIdentifier:@"logged in" sender:self];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
@@ -114,10 +134,15 @@
     }else{
         NSLog(@"could not log in");
     }
-
+    } else {
+        NSLog(@"FAILED");
+        [self.loginButton setEnabled:YES];
+    }
+    
 }
 
 - (IBAction)loginButtonPressed:(UIButton *)sender {
     [[BackendConnection getInstance] loginWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
+    [sender setEnabled:NO];
     }
 @end

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63276EA518FC6C6C00FFEEFF /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 63276EA418FC6C6C00FFEEFF /* Friend.m */; };
+		63276EA718FC8B2D00FFEEFF /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 63276EA618FC8B2D00FFEEFF /* background.png */; };
 		63AAA10018EC9CB800CB0E8C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63AAA0FF18EC9CB800CB0E8C /* Foundation.framework */; };
 		63AAA10218EC9CB800CB0E8C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63AAA10118EC9CB800CB0E8C /* CoreGraphics.framework */; };
 		63AAA10418EC9CB800CB0E8C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63AAA10318EC9CB800CB0E8C /* UIKit.framework */; };
@@ -26,7 +28,6 @@
 		63BFCCFB18EC9DBF007D5E32 /* AddFriendTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BFCCF218EC9DBF007D5E32 /* AddFriendTableViewController.m */; };
 		63BFCCFC18EC9DBF007D5E32 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BFCCF518EC9DBF007D5E32 /* LoginViewController.m */; };
 		63BFCCFD18EC9DBF007D5E32 /* CreateUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BFCCF618EC9DBF007D5E32 /* CreateUserViewController.m */; };
-		63C3916518F7692100394827 /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3916418F7692100394827 /* Friend.m */; };
 		63C3916818FC47FB00394827 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C3916718FC47FB00394827 /* User.m */; };
 		63CD5DD618F568CD00706603 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 63CD5DD418F568CD00706603 /* Model.xcdatamodeld */; };
 		EA01F22D397A47F8B8C30DD6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9DC7A78A25F43E3B89C8E43 /* libPods.a */; };
@@ -44,6 +45,9 @@
 
 /* Begin PBXFileReference section */
 		337AD69E3CE44FE68A493745 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		63276EA318FC6C6C00FFEEFF /* Friend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Friend.h; sourceTree = "<group>"; };
+		63276EA418FC6C6C00FFEEFF /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
+		63276EA618FC8B2D00FFEEFF /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = artwork/background.png; sourceTree = "<group>"; };
 		63AAA0FC18EC9CB800CB0E8C /* bit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63AAA0FF18EC9CB800CB0E8C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		63AAA10118EC9CB800CB0E8C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -72,8 +76,6 @@
 		63BFCCF618EC9DBF007D5E32 /* CreateUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateUserViewController.m; sourceTree = "<group>"; };
 		63BFCCF718EC9DBF007D5E32 /* CreateUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateUserViewController.h; sourceTree = "<group>"; };
 		63BFCCF818EC9DBF007D5E32 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		63C3916318F7692100394827 /* Friend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Friend.h; sourceTree = "<group>"; };
-		63C3916418F7692100394827 /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
 		63C3916618FC47FB00394827 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		63C3916718FC47FB00394827 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		63CD5DD518F568CD00706603 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 		63AAA0F318EC9CB800CB0E8C = {
 			isa = PBXGroup;
 			children = (
+				63276EA618FC8B2D00FFEEFF /* background.png */,
 				63AAA10518EC9CB900CB0E8C /* bit */,
 				63AAA12718EC9CB900CB0E8C /* bitTests */,
 				63AAA0FE18EC9CB800CB0E8C /* Frameworks */,
@@ -142,8 +145,6 @@
 			children = (
 				63AAA10E18EC9CB900CB0E8C /* AppDelegate.h */,
 				63AAA10F18EC9CB900CB0E8C /* AppDelegate.m */,
-				63C3916318F7692100394827 /* Friend.h */,
-				63C3916418F7692100394827 /* Friend.m */,
 				63AAA11118EC9CB900CB0E8C /* Main_iPhone.storyboard */,
 				63AAA11418EC9CB900CB0E8C /* Main_iPad.storyboard */,
 				63AAA11A18EC9CB900CB0E8C /* Images.xcassets */,
@@ -156,6 +157,8 @@
 				63BFCCF118EC9DBF007D5E32 /* BackendConnection.h */,
 				63C3916618FC47FB00394827 /* User.h */,
 				63C3916718FC47FB00394827 /* User.m */,
+				63276EA318FC6C6C00FFEEFF /* Friend.h */,
+				63276EA418FC6C6C00FFEEFF /* Friend.m */,
 				63BFCCF218EC9DBF007D5E32 /* AddFriendTableViewController.m */,
 				63BFCCF318EC9DBF007D5E32 /* AddFriendTableViewController.h */,
 				63BFCCF618EC9DBF007D5E32 /* CreateUserViewController.m */,
@@ -273,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63AAA11618EC9CB900CB0E8C /* Main_iPad.storyboard in Resources */,
+				63276EA718FC8B2D00FFEEFF /* background.png in Resources */,
 				63AAA11B18EC9CB900CB0E8C /* Images.xcassets in Resources */,
 				63AAA11318EC9CB900CB0E8C /* Main_iPhone.storyboard in Resources */,
 				63AAA10A18EC9CB900CB0E8C /* InfoPlist.strings in Resources */,
@@ -327,14 +331,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63BFCCFA18EC9DBF007D5E32 /* BackendConnection.m in Sources */,
 				63C3916818FC47FB00394827 /* User.m in Sources */,
+				63276EA518FC6C6C00FFEEFF /* Friend.m in Sources */,
 				63BFCCF918EC9DBF007D5E32 /* ViewController.m in Sources */,
 				63AAA11018EC9CB900CB0E8C /* AppDelegate.m in Sources */,
 				63BFCCFC18EC9DBF007D5E32 /* LoginViewController.m in Sources */,
-				63C3916518F7692100394827 /* Friend.m in Sources */,
 				63CD5DD618F568CD00706603 /* Model.xcdatamodeld in Sources */,
 				63BFCCFD18EC9DBF007D5E32 /* CreateUserViewController.m in Sources */,
-				63BFCCFA18EC9DBF007D5E32 /* BackendConnection.m in Sources */,
 				63BFCCFB18EC9DBF007D5E32 /* AddFriendTableViewController.m in Sources */,
 				63AAA10C18EC9CB900CB0E8C /* main.m in Sources */,
 			);

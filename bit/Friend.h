@@ -2,19 +2,17 @@
 //  Friend.h
 //  bit
 //
-//  Created by Morten Ydefeldt on 11/04/14.
+//  Created by Morten Ydefeldt on 14/04/14.
 //  Copyright (c) 2014 Ydefeldt. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "User.h"
 
-@interface Friend : NSObject
+@interface Friend : User
 
-@property (nonatomic) NSString* username;
-@property (nonatomic) NSInteger userID;
-@property (nonatomic) UIImage* userImage;
+@property (nonatomic) NSInteger type;
 
-
-- (Friend*) initWithResponseObject:(NSDictionary*) responseObject;
+-(void)acceptFriendRequest;
+-(void)sendNotification;
 
 @end

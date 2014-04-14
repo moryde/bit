@@ -8,35 +8,73 @@
 
 #import "User.h"
 #import "Friend.h"
+#import "BackendConnection.h"
 
 @implementation User
 
-- (User*)initWithResponseObject:(NSDictionary*)responseObject {
-    self = [super init];
-    NSLog([responseObject description]);
-    self.userID = [[responseObject objectForKey:@"id"] integerValue];
-    self.userName = [responseObject objectForKey:@"username"];
-    self.friends = [[NSMutableArray alloc] init];
+- (BackendConnection*)backendConnection {
     
-    if (![responseObject objectForKey:@"image"]) {
+    _backendConnection = [BackendConnection getInstance];
+    return _backendConnection;
+    
+}
+
+- (NSString *)userName {
+    
+    if (!_userName) {
+        _userName = [[NSString alloc] init];
+    }
+    return _userName;
+}
+
+- (NSString *)userID {
+    
+    if (!_userID) {
+        _userID = [[NSString alloc] init];
+    }
+    return _userID;
+}
+
+- (NSMutableArray *)friends {
+    
+    if (!_friends) {
+        _friends = [[NSMutableArray alloc] init];
+    }
+    return _friends;
+}
+
+-(void)sendFriendRequest {
+    
+    
+}
+
+- (instancetype)initWithUserDictionary:(NSDictionary*)userDictionary {
+
+    self = [super init];
+    if (self) {
+    self.userID = [userDictionary objectForKey:@"id"];
+    self.userName = [userDictionary objectForKey:@"username"];
+    
+    if (![userDictionary objectForKey:@"image"]) {
         NSURL *url = [NSURL URLWithString:@"http://midtfynsbryghus.mmd.eal.dk/group5/sveinn.jpg"];
         NSData *imageData = [NSData dataWithContentsOfURL:url];
         self.userImage = [UIImage imageWithData:imageData];
     } else{
-        self.userImage = [responseObject objectForKey:@"image"];
+        self.userImage = [userDictionary objectForKey:@"image"];
     }
-    for (NSDictionary *tempFriend in [responseObject objectForKey:@"friends"]) {
-        Friend *friend = [[Friend alloc] init];
-        [friend initWithResponseObject:tempFriend];
-        [self.friends addObject:friend];
+    if ([userDictionary objectForKey:@"friends"]) {
+        for (NSDictionary *tempFriend in [userDictionary objectForKey:@"friends"]) {
+            Friend *friend = [[Friend alloc] initWithUserDictionary:tempFriend];
+            friend.type = [[tempFriend objectForKey:@"type"] integerValue];
+            [self.friends addObject:friend];
+        }
     }
-    
-    NSLog([self.friends description]);
+
+}
     return self;
 }
 
 - (int)countTypeOfFriends {
-
     
     return 1;
     

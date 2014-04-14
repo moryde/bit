@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <AFNetworking.h>
 #import "User.h"
+#import "Friend.h"
+
+@class Friend, User;
+
 @protocol BackendConnectionDelegate;
 
 @interface BackendConnection : NSObject
@@ -17,21 +21,16 @@
 
 @property (nonatomic,strong) id <BackendConnectionDelegate> delegate;
 
-@property (nonatomic) NSMutableArray *friends;
-@property (nonatomic) NSString *urlString;
-@property (nonatomic) NSDictionary *user;
-@property (nonatomic) NSArray *allUsers;
-@property (nonatomic) NSArray *friendRequests;
-@property (nonatomic) UIImage *standardImage;
+@property (nonatomic) NSMutableArray *allUsers;
 @property (nonatomic) User *loggedInUser;
 
 - (NSDictionary*)loginWithUsername:(NSString*)username password:(NSString*)password;
 
-- (void)sendNotificationToUserAtIndexPath:(NSIndexPath*)indexPath;
-- (void) createNewUserWithUsername: (NSString*)userName password: (NSString*)password deviceToken: (NSString*)deviceToken;
+- (void)sendNotificationToFriend:(Friend*) friend;
+- (void)createNewUserWithUsername: (NSString*)userName password: (NSString*)password deviceToken: (NSString*)deviceToken;
 - (void)prepareToGetAllUsers;
-- (void)sendFriendRequestTo:(NSString*)receiverID;
-- (void) responsTofriendRequestFromFriend:(NSDictionary*)friend withResponse:(BOOL)response;
+- (void)sendFriendRequestTo:(User*)user;
+- (void)responsTofriendRequestFromFriend:(Friend*)friend withResponse:(BOOL)response;
 
 @end
 

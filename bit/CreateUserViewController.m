@@ -18,14 +18,32 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return YES;
+        NSInteger nextTag = textField.tag + 1;
+        // Try to find next responder
+        UIResponder* nextResponder = [textField.superview viewWithTag:nextTag];
+        if (nextResponder) {
+            // Found next responder, so set it.
+            [nextResponder becomeFirstResponder];
+        } else {
+            // Not found, so remove keyboard.
+            [textField resignFirstResponder];
+            [self createUserButton:nil];
+        }
+        return NO; // We do not want UITextField to insert line-breaks.
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    if (textField.tag == 1 || textField.tag == 2) {
+        [textField setSecureTextEntry:YES];
+    }
+    
 }
 
 - (void)viewDidLoad
@@ -56,21 +74,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (IBAction)createUserButton:(UIButton *)sender {
     
-    // Prepare the Device Token for Registration (remove spaces and < >)
-
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     NSString *devToken = [[[[appDelegate.deviceToken description]
@@ -80,7 +86,7 @@
         
     if ([self.passwordTextfield.text isEqualToString: self.rePasswordTextfield.text]) {
         [self.backendConnection createNewUserWithUsername:self.usernameTextfield.text password:self.passwordTextfield.text deviceToken:devToken];
-
+    
     }else {
         NSLog(@"passwords do not match");
     }
