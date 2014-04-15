@@ -35,16 +35,39 @@
     return _userID;
 }
 
-- (NSMutableArray *)friends {
+- (NSArray *)blockedFriends{
     
-    if (!_friends) {
-        _friends = [[NSMutableArray alloc] init];
+    return [self.relations objectForKey:@"0"];
+}
+
+- (NSArray *)friends{
+    
+    return [self.relations objectForKey:@"1"];
+}
+
+- (NSArray *)friendRequets{
+    
+    return [self.relations objectForKey:@"2"];
+}
+
+- (NSArray *)sendRequests{
+    
+    return [self.relations objectForKey:@"3"];
+}
+
+
+
+- (NSMutableDictionary *)relations {
+    
+    if (!_relations) {
+        _relations = [[NSMutableDictionary alloc] init];
     }
-    return _friends;
+    return _relations;
 }
 
 -(void)sendFriendRequest {
     
+    [self.backendConnection sendFriendRequestTo:self];
     
 }
 
@@ -66,7 +89,12 @@
         for (NSDictionary *tempFriend in [userDictionary objectForKey:@"friends"]) {
             Friend *friend = [[Friend alloc] initWithUserDictionary:tempFriend];
             friend.type = [[tempFriend objectForKey:@"type"] integerValue];
-            [self.friends addObject:friend];
+            if (![self.relations objectForKey:[tempFriend objectForKey:@"type"]]) {
+                NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:friend, nil];
+                [self.relations setObject:array forKey:[tempFriend objectForKey:@"type"]];
+            }else {
+                [[self.relations objectForKey:[tempFriend objectForKey:@"type"]] addObject:friend];
+            }
         }
     }
 

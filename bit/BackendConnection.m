@@ -37,7 +37,7 @@ static BackendConnection *singletonInstance;
 - (void)responsTofriendRequestFromFriend:(Friend*)friend withResponse:(BOOL)response {
 
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters = @{@"myID": self.loggedInUser.userID, @"friendID": [NSString stringWithFormat:@"%ldl",(long)friend.userID]};
+    NSDictionary *parameters = @{@"myID": self.loggedInUser.userID, @"friendID": friend.userID};
     [manager POST:@"http://www.ydefeldt.com/beep/acceptFriendRequest.php" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Accepted Friend Request");
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -54,7 +54,6 @@ static BackendConnection *singletonInstance;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:@"http://www.ydefeldt.com/beep/login.php" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
         if([responseObject isKindOfClass:[NSDictionary class]]) {
             if(![responseObject objectForKey:@"error"]){
                 self.loggedInUser = [[User alloc] initWithUserDictionary:responseObject];

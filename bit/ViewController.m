@@ -57,22 +57,34 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"%lu",(unsigned long)[self.backendConnection.loggedInUser.friends count]);
-    return [self.backendConnection.loggedInUser.friends count];
+    
+    NSArray *keys = [self.backendConnection.loggedInUser.relations allKeys];
+    NSString *key = keys[section];
+    return [[self.backendConnection.loggedInUser.relations objectForKey:key] count];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    NSLog(@"Number of section %lu",(unsigned long)[self.backendConnection.loggedInUser.relations count]);
+    return [self.backendConnection.loggedInUser.relations count];
+    
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSArray *keys = [self.backendConnection.loggedInUser.relations allKeys];
+    NSString *key = keys[section];
     
-    if (section == 0) {
+    if ([key isEqualToString:@"0"]) {
+        return @"Blocked User";
+    } else if ([key isEqualToString:@"1"]){
         return @"Friends";
-    }else{
-        return @"Friends Requests";
+    } else if ([key isEqualToString:@"2"]){
+        return @"Send Request";
+    } else if ([key isEqualToString:@"3"]){
+        return @"Friend Request";
     }
+    
+    return @"fejl";
 }
 
 -(NSData *)dataFromBase64EncodedString:(NSString *)string{
@@ -88,35 +100,61 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSArray* keys = [self.backendConnection.loggedInUser.relations allKeys];
+    
+    NSString *key = keys[indexPath.section];
+    NSLog(@"Key %@", key);
+   Friend *friend = [[self.backendConnection.loggedInUser.relations objectForKey:key] objectAtIndex:indexPath.row];
 
-    Friend *friend = [self.backendConnection.loggedInUser.friends objectAtIndex:indexPath.row];
-    if (friend.type == 1) {
+    
+    if ([key isEqualToString:@"0"]) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"blockedUser" forIndexPath:indexPath];
+        [cell.detailTextLabel setText:@"Friend"];
+        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
+        [cell.textLabel setText: friend.userName];
+        return cell;
+    } else if ([key isEqualToString:@"1"]) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friend" forIndexPath:indexPath];
         [cell.detailTextLabel setText:@"Friend"];
         [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
         [cell.textLabel setText: friend.userName];
         return cell;
-        
-    } else if (friend.type == 0){
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friendRequest" forIndexPath:indexPath];
+    }
+        else if ([key isEqualToString:@"2"]) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"sendRequest" forIndexPath:indexPath];
         [cell.detailTextLabel setText:@"Friend"];
         [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
         [cell.textLabel setText: friend.userName];
         return cell;
-
     }
-    
+        else if ([key isEqualToString:@"3"]) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friendRequest" forIndexPath:indexPath];
+        [cell.detailTextLabel setText:@"Friend"];
+        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
+        [cell.textLabel setText: friend.userName];
+    return cell;
+    }
+
     return nil;
 
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    Friend *friend = [self.backendConnection.loggedInUser.friends objectAtIndex:indexPath.row];
     
-    if (friend.type == 0) {
+    NSArray* keys = [self.backendConnection.loggedInUser.relations allKeys];
+    NSString *key = keys[indexPath.section];
+    NSLog(@"Key %@", key);
+    Friend *friend = [[self.backendConnection.loggedInUser.relations objectForKey:key] objectAtIndex:indexPath.row];
+    
+    if (friend.type == 3) {
         [friend acceptFriendRequest];
     } else if (friend.type == 1){
         [friend sendNotification];
+    } else if (friend.type == 0){
+        NSLog(@"BLOCKED USER PRESSED");
+    } else if (friend.type == 2){
+        NSLog(@"YOU JUST PRESSED A FRIEND REQUEST WHICH YOU HAVE MADE, THERE IS NOTHING TO DO WITH IT");
     }
 
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];

@@ -17,12 +17,17 @@
 
 @property (nonatomic) NSString *userID;
 @property (nonatomic) NSString *userName;
-@property (nonatomic) NSMutableArray *friends;
+@property (nonatomic) NSMutableDictionary *relations;
 @property (nonatomic) UIImage *userImage;
 
+@property (nonatomic) NSArray *friends;
+@property (nonatomic) NSArray *friendRequets;
+@property (nonatomic) NSArray *blockedFriends;
+@property (nonatomic) NSArray *sendRequests;
 
 - (instancetype)initWithUserDictionary:(NSDictionary*)userDictionary;
 - (int)countTypeOfFriends;
 - (void)sendFriendRequest;
+- (NSArray*)getFriendsWithType:(NSInteger)type;
 
 @end
