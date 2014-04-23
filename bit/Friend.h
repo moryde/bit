@@ -12,6 +12,7 @@
 
 @property (nonatomic) NSInteger type;
 
+
 -(void)acceptFriendRequest;
 -(void)sendNotification;
 

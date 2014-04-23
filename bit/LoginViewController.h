@@ -12,6 +12,7 @@
 
 - (IBAction)loginButtonPressed:(UIButton *)sender;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 
 @property (nonatomic) BackendConnection *backendConnection;
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;

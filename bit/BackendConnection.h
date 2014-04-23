@@ -26,6 +26,7 @@
 
 - (NSDictionary*)loginWithUsername:(NSString*)username password:(NSString*)password;
 
+- (void)updataInfo;
 - (void)sendNotificationToFriend:(Friend*) friend;
 - (void)createNewUserWithUsername: (NSString*)userName password: (NSString*)password deviceToken: (NSString*)deviceToken;
 - (void)prepareToGetAllUsers;
@@ -36,6 +37,7 @@
 
 @protocol BackendConnectionDelegate
 @optional
+- (void)infoUpdated;
 - (void)userLoggedIn:(User*)user;
 - (void)getInitialData:(NSArray*)friends;
 - (void)getAllUsers:(NSArray*)allUsers;

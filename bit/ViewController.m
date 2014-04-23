@@ -23,11 +23,19 @@
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
+- (void) infoUpdated {
+    [self.tableView reloadData];
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     
     self.backendConnection = [BackendConnection getInstance];
     [self.backendConnection setDelegate:self];
     [self.tableView reloadData];
+    [self.backendConnection updataInfo];
+    
+}
+- (void)userLoggedIn:(User*)user {
     
 }
 
@@ -40,6 +48,7 @@
 -(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if ([identifier isEqualToString:@"log out"]) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        self.backendConnection.loggedInUser = nil;
         [prefs setObject:nil forKey:@"loggedIn"];
         return YES;
     }

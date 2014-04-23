@@ -56,7 +56,6 @@
 }
 
 
-
 - (NSMutableDictionary *)relations {
     
     if (!_relations) {
@@ -71,13 +70,32 @@
     
 }
 
-- (instancetype)initWithUserDictionary:(NSDictionary*)userDictionary {
+- (Friend*)getFriendWithId: (NSString*)userID {
 
+    for (NSArray *group in self.relations) {
+        for (Friend *myfriend in group) {
+            
+            }
+        }
+    return nil;
+
+}
+
+- (Friend*)changeTypeOfFriend:(Friend*)afriend {
+    
+    
+    return nil;
+    
+}
+
+- (instancetype)initWithUserDictionary:(NSDictionary*)userDictionary {
+    
     self = [super init];
     if (self) {
+    self.relations = nil;
     self.userID = [userDictionary objectForKey:@"id"];
     self.userName = [userDictionary objectForKey:@"username"];
-    
+
     if (![userDictionary objectForKey:@"image"]) {
         NSURL *url = [NSURL URLWithString:@"http://midtfynsbryghus.mmd.eal.dk/group5/sveinn.jpg"];
         NSData *imageData = [NSData dataWithContentsOfURL:url];
@@ -97,7 +115,6 @@
             }
         }
     }
-
 }
     return self;
 }
