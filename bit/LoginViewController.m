@@ -53,10 +53,9 @@
     [self.passwordTextField setSecureTextEntry:NO];
     [self.passwordTextField setText:@"Password"];
     NSString *username = [prefs stringForKey:@"username"];
-    [self.errorLabel setText:@""];
+    
     if (username) {
         self.usernameTextField.text = username;
-        
     }
 
     
@@ -122,7 +121,7 @@
 }
 
 -(void)userLoggedIn:(User *)user {
-    NSLog([user description]);
+    
     if (user) {
     [self performSegueWithIdentifier:@"logged in" sender:self];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -137,7 +136,6 @@
     }
     } else {
         NSLog(@"FAILED");
-        [self.errorLabel setText:@"Could not log you in"];
         [self.loginButton setEnabled:YES];
     }
     

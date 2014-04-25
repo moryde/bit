@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Friend.h"
+
 @class BackendConnection;
 
 @interface User : NSObject {
@@ -19,18 +19,16 @@
 @property (nonatomic) NSString *userName;
 @property (nonatomic) NSMutableDictionary *relations;
 @property (nonatomic) UIImage *userImage;
-@property (nonatomic) NSString* password;
 
 @property (nonatomic) NSArray *friends;
 @property (nonatomic) NSArray *friendRequets;
 @property (nonatomic) NSArray *blockedFriends;
 @property (nonatomic) NSArray *sendRequests;
+@property (nonatomic) NSMutableArray *channels;
 
-
-- (Friend*)changeTypeOfFriend:(Friend*)afriend;
+- (void) updateRelations:(NSDictionary*)relationsResponse;
 - (instancetype)initWithUserDictionary:(NSDictionary*)userDictionary;
 - (int)countTypeOfFriends;
 - (void)sendFriendRequest;
-- (NSArray*)getFriendsWithType:(NSInteger)type;
 
 @end

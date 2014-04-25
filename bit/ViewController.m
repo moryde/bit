@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import <AFNetworking.h>
 #import "Friend.h"
+#import "FriendTableViewCell.h"
+
 @interface ViewController () {
 }
 
@@ -23,19 +25,11 @@
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void) infoUpdated {
-    [self.tableView reloadData];
-}
-
 -(void)viewWillAppear:(BOOL)animated{
     
     self.backendConnection = [BackendConnection getInstance];
     [self.backendConnection setDelegate:self];
     [self.tableView reloadData];
-    [self.backendConnection updataInfo];
-    
-}
-- (void)userLoggedIn:(User*)user {
     
 }
 
@@ -48,7 +42,6 @@
 -(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if ([identifier isEqualToString:@"log out"]) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        self.backendConnection.loggedInUser = nil;
         [prefs setObject:nil forKey:@"loggedIn"];
         return YES;
     }
@@ -83,14 +76,15 @@
     NSArray *keys = [self.backendConnection.loggedInUser.relations allKeys];
     NSString *key = keys[section];
     
-    if ([key isEqualToString:@"0"]) {
+    if ([key isEqualToString:@"1"]) {
         return @"Blocked User";
-    } else if ([key isEqualToString:@"1"]){
-        return @"Friends";
     } else if ([key isEqualToString:@"2"]){
-        return @"Send Request";
+        return @"Friends";
     } else if ([key isEqualToString:@"3"]){
         return @"Friend Request";
+    } else if ([key isEqualToString:@"4"]){
+        return @"Send Request";
+
     }
     
     return @"fejl";
@@ -117,26 +111,33 @@
    Friend *friend = [[self.backendConnection.loggedInUser.relations objectForKey:key] objectAtIndex:indexPath.row];
 
     
-    if ([key isEqualToString:@"0"]) {
+    if ([key isEqualToString:@"1"]) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"blockedUser" forIndexPath:indexPath];
-        [cell.detailTextLabel setText:@"Friend"];
         [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
         [cell.textLabel setText: friend.userName];
         return cell;
-    } else if ([key isEqualToString:@"1"]) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friend" forIndexPath:indexPath];
-        [cell.detailTextLabel setText:@"Friend"];
-        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
-        [cell.textLabel setText: friend.userName];
-        return cell;
+    
+    } else if ([key isEqualToString:@"2"]) {
+        if (!friend.question) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friend" forIndexPath:indexPath];
+            [cell.textLabel setText:[friend.userName uppercaseString]];
+            return cell;
+
+        } else {
+            FriendTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friendWithQuestion"];
+            [cell.myLabel setText:[friend.userName uppercaseString]];
+            return cell;
+
+        }
+
+
+//        [cell.setNeedsDisplay YES];
+        //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friend" forIndexPath:indexPath];
+        //[cell.detailTextLabel setText:@"Friend"];
+        //[cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
+        //[cell.textLabel setText: friend.userName];
     }
-        else if ([key isEqualToString:@"2"]) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"sendRequest" forIndexPath:indexPath];
-        [cell.detailTextLabel setText:@"Friend"];
-        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
-        [cell.textLabel setText: friend.userName];
-        return cell;
-    }
+
         else if ([key isEqualToString:@"3"]) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friendRequest" forIndexPath:indexPath];
         [cell.detailTextLabel setText:@"Friend"];
@@ -145,6 +146,14 @@
     return cell;
     }
 
+    else if ([key isEqualToString:@"4"]) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"sendRequest" forIndexPath:indexPath];
+        [cell.detailTextLabel setText:@"Friend"];
+        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
+        [cell.textLabel setText: friend.userName];
+        return cell;
+    }
+    
     return nil;
 
 }
@@ -158,11 +167,11 @@
     
     if (friend.type == 3) {
         [friend acceptFriendRequest];
-    } else if (friend.type == 1){
-        [friend sendNotification];
-    } else if (friend.type == 0){
-        NSLog(@"BLOCKED USER PRESSED");
     } else if (friend.type == 2){
+        [friend sendNotification];
+    } else if (friend.type == 1){
+        NSLog(@"BLOCKED USER PRESSED");
+    } else if (friend.type == 4){
         NSLog(@"YOU JUST PRESSED A FRIEND REQUEST WHICH YOU HAVE MADE, THERE IS NOTHING TO DO WITH IT");
     }
 
@@ -170,8 +179,6 @@
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-
-
 
 - (IBAction)reloadTableViewButton:(UIButton *)sender {
     [self.tableView reloadData];

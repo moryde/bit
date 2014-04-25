@@ -11,7 +11,7 @@
 @interface Friend : User
 
 @property (nonatomic) NSInteger type;
-
+@property (nonatomic) BOOL question;
 
 -(void)acceptFriendRequest;
 -(void)sendNotification;

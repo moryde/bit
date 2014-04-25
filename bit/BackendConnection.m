@@ -40,23 +40,12 @@ static BackendConnection *singletonInstance;
     NSDictionary *parameters = @{@"myID": self.loggedInUser.userID, @"friendID": friend.userID};
     [manager POST:@"http://www.ydefeldt.com/beep/acceptFriendRequest.php" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Accepted Friend Request");
-        [self updataInfo];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"FriendRequestAcceptionError");
         NSLog(@"Error: %@", error);
     }];
-
     
 }
-
-- (void)updataInfo {
-    
-    if (self.loggedInUser) {
-            [self loginWithUsername:self.loggedInUser.userImage password:self.loggedInUser.password];
-    }
-
-}
-
 
 -(User*)loginWithUsername:(NSString*)username password:(NSString*)password {
     
@@ -66,18 +55,17 @@ static BackendConnection *singletonInstance;
     [manager POST:@"http://www.ydefeldt.com/beep/login.php" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject isKindOfClass:[NSDictionary class]]) {
             if(![responseObject objectForKey:@"error"]){
-                self.loggedInUser = nil;
                 self.loggedInUser = [[User alloc] initWithUserDictionary:responseObject];
-                [self.loggedInUser setPassword:password];
+
                 NSUserDefaults *defs = [[NSUserDefaults alloc] init];
                 [defs setObject:@"1" forKey:@"loggedIn"];
                 [self.delegate userLoggedIn:self.loggedInUser];
-                [self.delegate infoUpdated];
             }
             else {
                 [self.delegate userLoggedIn:self.loggedInUser];
             }
         }
+        
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -120,13 +108,8 @@ static BackendConnection *singletonInstance;
 
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager POST:@"http://ydefeldt.com/beep/sendFriendRequest.php" parameters:parameters success:^(AFHTTPRequestOperation *opration, id responseObject){
-            if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                if ([responseObject objectForKey:@"id"]) {
-                    Friend *friend = [self getUserWithId:[responseObject objectForKey:@"id"]];
-                    
-                }
-            }
-            
+            NSLog(@"Friend request send with success");
+
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Friend request not JSON object");
 
@@ -136,16 +119,16 @@ static BackendConnection *singletonInstance;
 }
 
 
-
-
 -(void)prepareToGetAllUsers {
     self.allUsers = [[NSMutableArray alloc] init];
-    
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager POST:@"http://www.ydefeldt.com/beep/getUsers.php" parameters:nil success:^(AFHTTPRequestOperation *opration, id responseObject){
             
             for (NSDictionary* user in responseObject) {
-                [self.allUsers addObject:[[User alloc] initWithUserDictionary:user]];
+                User *tempUser = [[User alloc] initWithUserDictionary:user];
+                if (![tempUser.userID isEqualToString:self.loggedInUser.userID]) {
+                    [self.allUsers addObject:tempUser];
+                }
             }
             [self.delegate getAllUsers:self.allUsers];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -162,7 +145,6 @@ static BackendConnection *singletonInstance;
             NSLog(@"Success");
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Send notification not JSON object");
-            [self updataInfo];
         }];
     }
 

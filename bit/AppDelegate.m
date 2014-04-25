@@ -58,10 +58,10 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     UIApplicationState state = [application applicationState];
     if (state == UIApplicationStateActive) {
-        NSString *cancelTitle = @"No";
-        NSString *showTitle = @"Yes";
+        NSString *cancelTitle = @"Close";
+        NSString *showTitle = @"Show";
         NSString *message = [[userInfo valueForKey:@"aps"] valueForKey:@"alert"];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Bit from"
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Some title"
                                                             message:message
                                                            delegate:self
                                                   cancelButtonTitle:cancelTitle

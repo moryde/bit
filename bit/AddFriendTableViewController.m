@@ -66,8 +66,6 @@
 
 -(void)getAllUsers:(NSArray *)allUsers {
     [self.tableView reloadData];
-    NSLog([allUsers description]);
-    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -79,7 +77,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-
     return [self.backendConnection.allUsers count];
 }
 
@@ -89,7 +86,6 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"userCell" forIndexPath:indexPath];
     User *user = [self.backendConnection.allUsers objectAtIndex:indexPath.row];
     cell.textLabel.text = user.userName;
-    
 
     //[cell.imageView setImage:self.backendConnection.standardImage];
     

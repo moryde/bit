@@ -9,6 +9,7 @@
 #import "User.h"
 #import "Friend.h"
 #import "BackendConnection.h"
+#import "channel.h"
 
 @implementation User
 
@@ -26,6 +27,8 @@
     }
     return _userName;
 }
+
+
 
 - (NSString *)userID {
     
@@ -64,38 +67,45 @@
     return _relations;
 }
 
+- (NSMutableArray *)channels {
+    if (!_channels) {
+        _channels = [[NSMutableArray alloc]init];
+    }
+    return _channels;
+}
+
 -(void)sendFriendRequest {
     
     [self.backendConnection sendFriendRequestTo:self];
     
 }
 
-- (Friend*)getFriendWithId: (NSString*)userID {
-
-    for (NSArray *group in self.relations) {
-        for (Friend *myfriend in group) {
-            
-            }
+- (void) updateRelations:(NSDictionary*)relationsResponse {
+    
+    self.relations = nil;
+    for (NSDictionary *tempFriend in relationsResponse) {
+        Friend *friend = [[Friend alloc] initWithUserDictionary:tempFriend];
+        friend.type = [[tempFriend objectForKey:@"type"] integerValue];
+        friend.question = [[tempFriend objectForKey:@"question"]boolValue];
+        
+        if (![self.relations objectForKey:[tempFriend objectForKey:@"type"]]) {
+            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:friend, nil];
+            [self.relations setObject:array forKey:[tempFriend objectForKey:@"type"]];
+        }else {
+            [[self.relations objectForKey:[tempFriend objectForKey:@"type"]] addObject:friend];
         }
-    return nil;
+    }
 
-}
-
-- (Friend*)changeTypeOfFriend:(Friend*)afriend {
-    
-    
-    return nil;
-    
 }
 
 - (instancetype)initWithUserDictionary:(NSDictionary*)userDictionary {
-    
+
     self = [super init];
     if (self) {
-    self.relations = nil;
     self.userID = [userDictionary objectForKey:@"id"];
     self.userName = [userDictionary objectForKey:@"username"];
-
+    self.channels = [userDictionary objectForKey:@"channels"];
+        
     if (![userDictionary objectForKey:@"image"]) {
         NSURL *url = [NSURL URLWithString:@"http://midtfynsbryghus.mmd.eal.dk/group5/sveinn.jpg"];
         NSData *imageData = [NSData dataWithContentsOfURL:url];
@@ -103,18 +113,20 @@
     } else{
         self.userImage = [userDictionary objectForKey:@"image"];
     }
+        
     if ([userDictionary objectForKey:@"friends"]) {
-        for (NSDictionary *tempFriend in [userDictionary objectForKey:@"friends"]) {
-            Friend *friend = [[Friend alloc] initWithUserDictionary:tempFriend];
-            friend.type = [[tempFriend objectForKey:@"type"] integerValue];
-            if (![self.relations objectForKey:[tempFriend objectForKey:@"type"]]) {
-                NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:friend, nil];
-                [self.relations setObject:array forKey:[tempFriend objectForKey:@"type"]];
-            }else {
-                [[self.relations objectForKey:[tempFriend objectForKey:@"type"]] addObject:friend];
-            }
-        }
+        [self updateRelations:[userDictionary objectForKey:@"friends"]];
     }
+        if ([userDictionary objectForKey:@"channels"]) {
+            for (NSDictionary* tempChannel in [userDictionary objectForKey:@"channels"]) {
+                Channel *channel = [[Channel alloc] init];
+                channel.channelname = [tempChannel objectForKey:@"channelname"];
+                [self.channels addObject:channel];
+            }
+            
+
+        }
+
 }
     return self;
 }
