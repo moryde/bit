@@ -8,6 +8,8 @@
 
 #import "CreateUserViewController.h"
 #import "AppDelegate.h"
+#import <Parse/Parse.h>
+
 @interface CreateUserViewController ()
 
 @end
@@ -77,18 +79,32 @@
 
 - (IBAction)createUserButton:(UIButton *)sender {
     
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    NSString *devToken = [[[[appDelegate.deviceToken description]
-                            stringByReplacingOccurrencesOfString:@"<"withString:@""]
-                           stringByReplacingOccurrencesOfString:@">" withString:@""]
-                          stringByReplacingOccurrencesOfString: @" " withString: @""];
-        
-    if ([self.passwordTextfield.text isEqualToString: self.rePasswordTextfield.text]) {
-        [self.backendConnection createNewUserWithUsername:self.usernameTextfield.text password:self.passwordTextfield.text deviceToken:devToken];
+    NSString *user = [self.usernameTextfield text];
+    NSString *pass = [self.passwordTextfield text];
     
-    }else {
-        NSLog(@"passwords do not match");
+    if ([user length] < 4 || [pass length] < 4) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Entry" message:@"Username and Password must both be at least 4 characters long." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil];
+        [alert show];
+    }
+    
+    else {
+        
+        [self.activityIndicator startAnimating];
+        
+        PFUser *newUser = [PFUser user];
+        newUser.username = user;
+        newUser.password = pass;
+        [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            [self.activityIndicator stopAnimating];
+            if (error) {
+                NSString *errorString = [[error userInfo] objectForKey:@"error"];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil];
+                [alert show];
+            } else {
+                [self dismissViewControllerAnimated:YES completion:nil];
+                //[self performSegueWithIdentifier:@"signupToMain" sender:self];
+            }
+        }];
     }
     
     

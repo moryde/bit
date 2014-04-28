@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextfield;
 @property (weak, nonatomic) IBOutlet UITextField *rePasswordTextfield;
 - (IBAction)createUserButton:(UIButton *)sender;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end

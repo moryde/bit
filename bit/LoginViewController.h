@@ -10,11 +10,17 @@
 #import "backendConnection.h"
 @interface LoginViewController : ViewController <BackendConnectionDelegate, UITextFieldDelegate>
 
-- (IBAction)loginButtonPressed:(UIButton *)sender;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIButton *something;
 
 @property (nonatomic) BackendConnection *backendConnection;
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UITextField *password2TextField;
+
+- (IBAction)loginButtonPressed:(UIButton *)sender;
+- (IBAction)newUserButtonPressed:(id)sender;
+
 
 @end

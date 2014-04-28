@@ -14,7 +14,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic) BackendConnection *backendConnection;
+@property (nonatomic) NSArray *friends;
 
-- (IBAction)loginButtonPressed:(UIButton *)sender;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "ChannelsViewController.h"
 
-@interface ChannelsViewController ()
+@interface ChannelsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
@@ -23,6 +23,29 @@
     return self;
 }
 
+- (NSArray*)channels {
+
+    if (!_channels) {
+        _channels = [[NSArray alloc] init];
+    }
+        return _channels;
+}
+
+- (void) prepareData {
+    
+    PFQuery *query = [[PFQuery alloc] initWithClassName:@"Channel"];
+    [query whereKey:@"createdBy" equalTo:[PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            NSLog(@"OMGOMGOGM");
+            self.channels = objects;
+            [self.tableView reloadData];
+        }
+        
+    }];
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -30,13 +53,26 @@
     // Do any additional setup after loading the view.
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    
-    NSLog(@"HOW MANU");
-    return 0;
+- (void) viewWillAppear:(BOOL)animated{
+    [self.tabelView reloadData];
+    //[self prepareData];
+
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSLog(@"%i Channel with this user", self.channels.count);
+    return self.channels.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"channelCell"];
+    PFObject *channel = [self.channels objectAtIndex:indexPath.row];
+    cell.textLabel.text = channel[@"name"];
+    return cell;
+    
+}
 
 - (void)didReceiveMemoryWarning
 {

@@ -10,9 +10,14 @@
 #import <AFNetworking.h>
 #import "Friend.h"
 #import "FriendTableViewCell.h"
+#import <Parse/Parse.h>
+#import "LoginViewController.h"
+#import <Parse/Parse.h>
 
-@interface ViewController () {
+@interface ViewController () <PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>{
+
 }
+@property (nonatomic) UIRefreshControl *refreshControl;
 
 @end
 
@@ -23,6 +28,32 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    [PFUser logOut];
+    if ([PFUser currentUser]) {
+        
+        PFUser *user = [PFUser currentUser];
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        [currentInstallation setObject:[PFUser currentUser].objectId forKey:@"user"];
+        [currentInstallation saveEventually];
+        
+        PFQuery *query = [PFQuery queryWithClassName:@"Relations"];
+        [query whereKey:@"receivingUser" equalTo:user];
+        self.friends = [query findObjects];
+    }
+    
+    self.refreshControl = [[UIRefreshControl alloc]init];
+    [self.tableView addSubview:self.refreshControl];
+    [self.refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
+    
+
+    
+}
+
+- (void)refreshTable {
+    //TODO: refresh your data
+    [self.refreshControl endRefreshing];
+    [self.tableView reloadData];
+    NSLog(@"RefreshControlEnded");
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -31,6 +62,28 @@
     [self.backendConnection setDelegate:self];
     [self.tableView reloadData];
     
+    self.navigationController.navigationBar.backgroundColor = [UIColor grayColor];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+    if (![PFUser currentUser]) { // No user logged in
+        // Create the log in view controller
+//        PFLogInViewController *logInViewController = [[PFLogInViewController alloc] init];
+//        [logInViewController setDelegate:self]; // Set ourselves as the delegate
+        
+        // Create the sign up view controller
+//        PFSignUpViewController *signUpViewController = [[PFSignUpViewController alloc] init];
+//        [signUpViewController setDelegate:self]; // Set ourselves as the delegate
+//        
+        // Assign our sign up controller to be displayed from the login controller
+       // [logInViewController setSignUpController:signUpViewController];
+        
+        // Present the log in view controller
+       // [self presentViewController:logInViewController animated:YES completion:NULL];
+        //LoginViewController *loginViewController = [[LoginViewController alloc] init];
+        [self performSegueWithIdentifier:@"presentLoginController" sender:self];
+    }
 }
 
 - (bool)textFieldShouldReturn:(UITextField *)textField{
@@ -42,6 +95,7 @@
 -(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if ([identifier isEqualToString:@"log out"]) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [PFUser logOut];
         [prefs setObject:nil forKey:@"loggedIn"];
         return YES;
     }
@@ -59,7 +113,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+    return self.friends.count;
     NSArray *keys = [self.backendConnection.loggedInUser.relations allKeys];
     NSString *key = keys[section];
     return [[self.backendConnection.loggedInUser.relations objectForKey:key] count];
@@ -67,27 +121,13 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSLog(@"Number of section %lu",(unsigned long)[self.backendConnection.loggedInUser.relations count]);
-    return [self.backendConnection.loggedInUser.relations count];
-    
+    return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSArray *keys = [self.backendConnection.loggedInUser.relations allKeys];
-    NSString *key = keys[section];
-    
-    if ([key isEqualToString:@"1"]) {
-        return @"Blocked User";
-    } else if ([key isEqualToString:@"2"]){
-        return @"Friends";
-    } else if ([key isEqualToString:@"3"]){
-        return @"Friend Request";
-    } else if ([key isEqualToString:@"4"]){
-        return @"Send Request";
 
-    }
-    
-    return @"fejl";
+
+    return @"Friends";
 }
 
 -(NSData *)dataFromBase64EncodedString:(NSString *)string{
@@ -104,12 +144,26 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    PFUser *myFriend = [[self.friends objectAtIndex:indexPath.row] objectForKey:@"sendingUser"];
+    [myFriend fetchIfNeeded];
+
+    FriendTableViewCell *cell2 = [tableView dequeueReusableCellWithIdentifier:@"friendWithQuestion" forIndexPath:indexPath];
+    PFFile *PFimage = myFriend[@"avatar"];
+    
+    [PFimage getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        UIImage *image = [UIImage imageWithData:data];
+        cell2.imageView.image = image;
+    }];
+    
+    [cell2.textLabel setText:myFriend.username];
+    return cell2;
+    
     NSArray* keys = [self.backendConnection.loggedInUser.relations allKeys];
     
     NSString *key = keys[indexPath.section];
     NSLog(@"Key %@", key);
    Friend *friend = [[self.backendConnection.loggedInUser.relations objectForKey:key] objectAtIndex:indexPath.row];
-
+    
     
     if ([key isEqualToString:@"1"]) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"blockedUser" forIndexPath:indexPath];
@@ -129,13 +183,6 @@
             return cell;
 
         }
-
-
-//        [cell.setNeedsDisplay YES];
-        //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friend" forIndexPath:indexPath];
-        //[cell.detailTextLabel setText:@"Friend"];
-        //[cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
-        //[cell.textLabel setText: friend.userName];
     }
 
         else if ([key isEqualToString:@"3"]) {
@@ -143,7 +190,7 @@
         [cell.detailTextLabel setText:@"Friend"];
         [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
         [cell.textLabel setText: friend.userName];
-    return cell;
+        return cell;
     }
 
     else if ([key isEqualToString:@"4"]) {
@@ -154,30 +201,34 @@
         return cell;
     }
     
-    return nil;
+        return nil;
 
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    NSArray* keys = [self.backendConnection.loggedInUser.relations allKeys];
-    NSString *key = keys[indexPath.section];
-    NSLog(@"Key %@", key);
-    Friend *friend = [[self.backendConnection.loggedInUser.relations objectForKey:key] objectAtIndex:indexPath.row];
+    PFObject *relation = [self.friends objectAtIndex:indexPath.row];
     
-    if (friend.type == 3) {
-        [friend acceptFriendRequest];
-    } else if (friend.type == 2){
-        [friend sendNotification];
-    } else if (friend.type == 1){
-        NSLog(@"BLOCKED USER PRESSED");
-    } else if (friend.type == 4){
-        NSLog(@"YOU JUST PRESSED A FRIEND REQUEST WHICH YOU HAVE MADE, THERE IS NOTHING TO DO WITH IT");
+    if ([relation[@"type"] isEqualToString:@"0"]) {
+        relation[@"type"] = @"1";
+    } else if ([relation[@"type"] isEqualToString:@"1"]) {
+        PFUser *myFriend = relation[@"receivingUser"];
+        PFPush *push = [[PFPush alloc] init];
+        PFQuery *query = [PFInstallation query];
+        [query whereKey:@"user" equalTo:myFriend.objectId];
+        
+        NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                              @"Increment", @"badge",
+                              @"cheering.caf", @"sound",
+                              nil];
+        
+        [push setQuery:query]; // Set our Installation query
+        [push setMessage:[NSString stringWithFormat:@"%@ send you a bit",[PFUser currentUser].username]];
+        [push setData:data];
+        [push sendPushInBackground];
     }
+    [relation saveInBackground];
 
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (IBAction)reloadTableViewButton:(UIButton *)sender {

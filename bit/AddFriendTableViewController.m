@@ -9,7 +9,8 @@
 #import "AddFriendTableViewController.h"
 #import "ViewController.h"
 #import "User.h"
-
+#import <Parse/Parse.h>
+#import "PossibleFriendTableViewCell.h"
 @interface AddFriendTableViewController () <BackendConnectionDelegate>
 
 @end
@@ -20,7 +21,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.allUsers = [[NSArray alloc] init];
+        self.users = [[NSArray alloc] init];
         
     }
     return self;
@@ -29,14 +30,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    PFQuery *query = [PFUser query];
+    self.users = [query findObjects];
+    
+    //[self presentViewController:controller animated:YES completion:nil];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-
 }
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     
@@ -70,24 +73,53 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    User *user = [self.backendConnection.allUsers objectAtIndex:indexPath.row];
-    [user sendFriendRequest];
+    //User *user = [self.backendConnection.allUsers objectAtIndex:indexPath.row];
+    //[user sendFriendRequest];
+    PFUser *user = [PFUser currentUser];
+    PFUser *reciever = [self.users objectAtIndex:indexPath.row];
+    
+    PFObject *relations = [PFObject objectWithClassName:@"Relations"];
+    
+    relations[@"sendingUser"] = user;
+    relations[@"receivingUser"] = reciever;
+    relations[@"type"] = @"0";
+    
+    [relations saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            PossibleFriendTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+
+            [UIView transitionWithView:cell.imageViewRight
+                              duration:0.3f
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                cell.imageViewRight.image = [UIImage imageNamed:@"requestSend.png"];
+                                cell.selected = NO;
+                            } completion:nil];
+            
+        }
+    }];
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return [self.backendConnection.allUsers count];
+    return self.users.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"userCell" forIndexPath:indexPath];
-    User *user = [self.backendConnection.allUsers objectAtIndex:indexPath.row];
-    cell.textLabel.text = user.userName;
-
-    //[cell.imageView setImage:self.backendConnection.standardImage];
+    PFUser *user = [self.users objectAtIndex:indexPath.row];
+    PossibleFriendTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"userCell" forIndexPath:indexPath];
+    cell.textLabel.text = user.username;
+    
+    PFFile *PFimage = user[@"avatar"];
+    
+    [PFimage getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        UIImage *image = [UIImage imageWithData:data];
+        cell.imageView.image = image;
+        cell.imageView.layer.cornerRadius = 25;
+    }];
     
     return cell;
 }
