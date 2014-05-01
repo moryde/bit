@@ -23,13 +23,6 @@
     return self;
 }
 
-- (NSArray*)channels {
-
-    if (!_channels) {
-        _channels = [[NSArray alloc] init];
-    }
-        return _channels;
-}
 
 - (void) prepareData {
     
@@ -37,25 +30,27 @@
     [query whereKey:@"createdBy" equalTo:[PFUser currentUser]];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
-            NSLog(@"OMGOMGOGM");
             self.channels = objects;
-            [self.tableView reloadData];
+            //[self.tableView reloadData];
         }
         
     }];
     
 }
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.tabelView reloadData];
+    //[self.tabelView reloadData];
     // Do any additional setup after loading the view.
 }
 
 - (void) viewWillAppear:(BOOL)animated{
     [self.tabelView reloadData];
-    //[self prepareData];
+    [self prepareData];
+    NSLog(@"This is a test");
 
 }
 

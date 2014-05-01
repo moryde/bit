@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <Parse/Parse.h>
 @interface ChannelsViewController : ViewController <UITableViewDataSource, UITableViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UITableView *tabelView;
 @property (nonatomic) NSArray *channels;
 @end

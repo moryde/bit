@@ -25,6 +25,14 @@
     // Initialization code
 }
 
+- (void) setImageView:(UIImageView *)imageView {
+    
+    imageView.layer.borderWidth = 2;
+    imageView.layer.borderColor = [UIColor whiteColor].CGColor;
+    imageView.layer.shadowColor = [UIColor grayColor].CGColor;
+    imageView.layer.shadowOpacity = 0.5;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
@@ -32,4 +40,9 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)askQuestionButton:(id)sender {
+    
+    NSLog(@"LOL");
+    
+}
 @end

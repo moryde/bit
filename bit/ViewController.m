@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import <AFNetworking.h>
-#import "Friend.h"
 #import "FriendTableViewCell.h"
 #import <Parse/Parse.h>
 #import "LoginViewController.h"
@@ -28,18 +27,14 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    [PFUser logOut];
+
     if ([PFUser currentUser]) {
-        
-        PFUser *user = [PFUser currentUser];
         PFInstallation *currentInstallation = [PFInstallation currentInstallation];
         [currentInstallation setObject:[PFUser currentUser].objectId forKey:@"user"];
         [currentInstallation saveEventually];
-        
-        PFQuery *query = [PFQuery queryWithClassName:@"Relations"];
-        [query whereKey:@"receivingUser" equalTo:user];
-        self.friends = [query findObjects];
+        [self refreshTable];
     }
+    
     
     self.refreshControl = [[UIRefreshControl alloc]init];
     [self.tableView addSubview:self.refreshControl];
@@ -50,38 +45,40 @@
 }
 
 - (void)refreshTable {
-    //TODO: refresh your data
-    [self.refreshControl endRefreshing];
-    [self.tableView reloadData];
-    NSLog(@"RefreshControlEnded");
+    NSLog(@"Refresh Table");
+    PFUser *user = [PFUser currentUser];
+    
+    PFQuery *friendsQuery = [PFQuery queryWithClassName:@"Relations"];
+    [friendsQuery whereKey:@"receivingUser" equalTo:user];
+    [friendsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        NSLog(@"Recieved Friends");
+        self.friends = objects;
+        [self.refreshControl endRefreshing];
+        [self.tableView reloadData];
+
+    }];
+    
+    PFQuery *activityQuery = [PFQuery queryWithClassName:@"activity"];
+    [activityQuery whereKey:@"receivingUser" equalTo:user];
+    [activityQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            NSLog(@"Recieved activity");
+            self.activity = objects;
+            [self.refreshControl endRefreshing];
+            [self.tableView reloadData];
+
+        }
+    }];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
-    self.backendConnection = [BackendConnection getInstance];
-    [self.backendConnection setDelegate:self];
-    [self.tableView reloadData];
-    
-    self.navigationController.navigationBar.backgroundColor = [UIColor grayColor];
+    //[self refreshTable];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     
     if (![PFUser currentUser]) { // No user logged in
-        // Create the log in view controller
-//        PFLogInViewController *logInViewController = [[PFLogInViewController alloc] init];
-//        [logInViewController setDelegate:self]; // Set ourselves as the delegate
-        
-        // Create the sign up view controller
-//        PFSignUpViewController *signUpViewController = [[PFSignUpViewController alloc] init];
-//        [signUpViewController setDelegate:self]; // Set ourselves as the delegate
-//        
-        // Assign our sign up controller to be displayed from the login controller
-       // [logInViewController setSignUpController:signUpViewController];
-        
-        // Present the log in view controller
-       // [self presentViewController:logInViewController animated:YES completion:NULL];
-        //LoginViewController *loginViewController = [[LoginViewController alloc] init];
         [self performSegueWithIdentifier:@"presentLoginController" sender:self];
     }
 }
@@ -102,9 +99,6 @@
     return YES;
 }
 
-- (void)getInitialData:(NSArray *)friends {
-    [self.tableView reloadData];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -113,96 +107,120 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.friends.count;
-    NSArray *keys = [self.backendConnection.loggedInUser.relations allKeys];
-    NSString *key = keys[section];
-    return [[self.backendConnection.loggedInUser.relations objectForKey:key] count];
+    
+    NSLog(@"Number of row in section");
+    
+    switch (section) {
+        case 0:
+            if (self.activity.count == 0) {
+                return 0;
+            } else {
+                return self.activity.count;
+            }
+            break;
+        case 1:
+            if (self.friends.count == 0) {
+                return 0;
+            } else {
+                return self.friends.count;
+            }
+        default:
+            return 0;
+            NSLog(@"Exception in section count Viewcontroller");
+            break;
+    }
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 
-
-    return @"Friends";
-}
-
--(NSData *)dataFromBase64EncodedString:(NSString *)string{
-    if (string.length > 0) {
-        
-        //the iPhone has base 64 decoding built in but not obviously. The trick is to
-        //create a data url that's base 64 encoded and ask an NSData to load it.
-        NSString *data64URLString = [NSString stringWithFormat:@"data:;base64,%@", string];
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:data64URLString]];
-        return data;
-    }
-    return nil;
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return 60;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    PFUser *myFriend = [[self.friends objectAtIndex:indexPath.row] objectForKey:@"sendingUser"];
-    [myFriend fetchIfNeeded];
+    FriendTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friend" forIndexPath:indexPath];
 
-    FriendTableViewCell *cell2 = [tableView dequeueReusableCellWithIdentifier:@"friendWithQuestion" forIndexPath:indexPath];
-    PFFile *PFimage = myFriend[@"avatar"];
-    
-    [PFimage getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        UIImage *image = [UIImage imageWithData:data];
-        cell2.imageView.image = image;
-    }];
-    
-    [cell2.textLabel setText:myFriend.username];
-    return cell2;
-    
-    NSArray* keys = [self.backendConnection.loggedInUser.relations allKeys];
-    
-    NSString *key = keys[indexPath.section];
-    NSLog(@"Key %@", key);
-   Friend *friend = [[self.backendConnection.loggedInUser.relations objectForKey:key] objectAtIndex:indexPath.row];
-    
-    
-    if ([key isEqualToString:@"1"]) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"blockedUser" forIndexPath:indexPath];
-        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
-        [cell.textLabel setText: friend.userName];
-        return cell;
-    
-    } else if ([key isEqualToString:@"2"]) {
-        if (!friend.question) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friend" forIndexPath:indexPath];
-            [cell.textLabel setText:[friend.userName uppercaseString]];
-            return cell;
-
-        } else {
-            FriendTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friendWithQuestion"];
-            [cell.myLabel setText:[friend.userName uppercaseString]];
-            return cell;
+    if (indexPath.section == 0) {
+        PFObject *activity = [self.activity objectAtIndex:indexPath.row];
+        PFUser *sendingUser = activity[@"sendingUser"];
+        [sendingUser fetchIfNeeded];
+        
+        if ([activity[@"payload"] isEqualToString:@""]) {
+            cell.titleLabel.text = [NSString stringWithFormat:@"%@ Send you a bit",sendingUser.username];
+            PFFile *PFimage = sendingUser[@"avatar"];
+            if (PFimage) {
+                [PFimage getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                    if (!error) {
+                        UIImage *image = [UIImage imageWithData:data];
+                        cell.thumb.image = image;
+                        //[self.tableView reloadData];
+                    }
+                }];
+            } else{
+                cell.thumb.image = [UIImage imageNamed:@"me_thumb.jpg"];
+            }
 
         }
     }
-
-        else if ([key isEqualToString:@"3"]) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friendRequest" forIndexPath:indexPath];
-        [cell.detailTextLabel setText:@"Friend"];
-        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
-        [cell.textLabel setText: friend.userName];
-        return cell;
+    else if (indexPath.section == 1){
+        PFUser *friend = [[self.friends objectAtIndex:indexPath.row] objectForKey:@"sendingUser"];
+        [friend fetchIfNeeded];
+        PFFile *PFimage = friend[@"avatar"];
+        cell.titleLabel.text = friend.username;
+        
+        if (PFimage) {
+            [PFimage getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                if (!error) {
+                    UIImage *image = [UIImage imageWithData:data];
+                    cell.thumb.image = image;
+                    //[self.tableView reloadData];
+                }
+            }];
+        } else{
+            cell.thumb.image = [UIImage imageNamed:@"me_thumb.jpg"];
+        }
     }
 
-    else if ([key isEqualToString:@"4"]) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"sendRequest" forIndexPath:indexPath];
-        [cell.detailTextLabel setText:@"Friend"];
-        [cell.imageView setImage:self.backendConnection.loggedInUser.userImage];
-        [cell.textLabel setText: friend.userName];
-        return cell;
+
+    
+    return cell;
+
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionHeaderText = [[NSString alloc] init];
+    
+    switch (section) {
+        case 0:
+            sectionHeaderText = @"Activity";
+            break;
+        case 1:
+            sectionHeaderText = @"Friends";
+            break;
+        default:
+            sectionHeaderText = @"Fail";
+            break;
     }
     
-        return nil;
+    
+    UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];
 
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 2, tableView.frame.size.width, 18)];
+    [headerLabel setFont:[UIFont boldSystemFontOfSize:14]];
+
+    [headerLabel setTextColor:[UIColor whiteColor]];
+    [headerLabel setText:sectionHeaderText];
+    [sectionView addSubview:headerLabel];
+    [sectionView setBackgroundColor:[UIColor colorWithRed:17/255.0 green:168/255.0 blue:170/255.0 alpha:1.0]];
+    return sectionView;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -221,17 +239,21 @@
                               @"Increment", @"badge",
                               @"cheering.caf", @"sound",
                               nil];
-        
-        [push setQuery:query]; // Set our Installation query
+        [push setQuery:query];
         [push setMessage:[NSString stringWithFormat:@"%@ send you a bit",[PFUser currentUser].username]];
         [push setData:data];
         [push sendPushInBackground];
+        
+        PFObject *activity = [PFObject objectWithClassName:@"activity"];
+        activity[@"receivingUser"] = myFriend;
+        activity[@"sendingUser"] = [PFUser currentUser];
+        activity[@"answer"] = @"";
+        activity[@"payload"] = @"";
+        [activity save];
     }
     [relation saveInBackground];
 
 }
 
-- (IBAction)reloadTableViewButton:(UIButton *)sender {
-    [self.tableView reloadData];
-}
+
 @end

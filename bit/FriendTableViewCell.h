@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface FriendTableViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *myLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *thumb;
+- (IBAction)askQuestionButton:(id)sender;
 
 @end

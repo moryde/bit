@@ -7,14 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BackendConnection.h"
 
-@interface ViewController : UIViewController <UITableViewDataSource, UITabBarDelegate, BackendConnectionDelegate, UITextFieldDelegate> {
+@interface ViewController : UIViewController <UITableViewDataSource, UITabBarDelegate, UITextFieldDelegate> {
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic) BackendConnection *backendConnection;
 @property (nonatomic) NSArray *friends;
-
+@property (nonatomic) NSArray *activity;
 
 @end

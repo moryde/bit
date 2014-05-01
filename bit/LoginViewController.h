@@ -7,13 +7,12 @@
 //
 
 #import "ViewController.h"
-#import "backendConnection.h"
-@interface LoginViewController : ViewController <BackendConnectionDelegate, UITextFieldDelegate>
+
+@interface LoginViewController : ViewController <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIButton *something;
 
-@property (nonatomic) BackendConnection *backendConnection;
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;

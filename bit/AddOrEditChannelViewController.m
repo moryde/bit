@@ -30,9 +30,14 @@
     // Do any additional setup after loading the view.
 }
 
+- (bool)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     
-    
+    [self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:17/255.0 green:168/255.0 blue:170/255.0 alpha:1.0]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,16 +46,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (IBAction)createChannelButtonAction:(UIButton *)sender {
     
@@ -62,7 +57,7 @@
     channel[@"isPublic"] = [NSNumber numberWithBool:[self.isPublicSwitch isOn]];
     channel[@"isOpen"] = [NSNumber numberWithBool:[self.isOpenSwitch isOn]];
     [channel saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [self performSegueWithIdentifier:@"done editing channel" sender:self];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
 }
 @end

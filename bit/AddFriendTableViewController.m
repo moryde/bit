@@ -8,10 +8,9 @@
 
 #import "AddFriendTableViewController.h"
 #import "ViewController.h"
-#import "User.h"
 #import <Parse/Parse.h>
 #import "PossibleFriendTableViewCell.h"
-@interface AddFriendTableViewController () <BackendConnectionDelegate>
+@interface AddFriendTableViewController ()
 
 @end
 
@@ -22,7 +21,6 @@
     self = [super initWithStyle:style];
     if (self) {
         self.users = [[NSArray alloc] init];
-        
     }
     return self;
 }
@@ -30,16 +28,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"AddFriendViewController loaded");
     
     PFQuery *query = [PFUser query];
-    self.users = [query findObjects];
-    
-    //[self presentViewController:controller animated:YES completion:nil];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        self.users = objects;
+    }];
 }
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     
@@ -52,9 +46,6 @@
 
 -(void)viewWillAppear:(BOOL)animated {
 
-    self.backendConnection = [BackendConnection getInstance];
-    [self.backendConnection setDelegate:self];
-    [self.backendConnection prepareToGetAllUsers];
     [self.searchUsers setDelegate:self];
 }
 
@@ -67,9 +58,6 @@
 
 #pragma mark - Table view data source
 
--(void)getAllUsers:(NSArray *)allUsers {
-    [self.tableView reloadData];
-}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     

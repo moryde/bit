@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BackendConnection.h"
 
 @interface AddFriendTableViewController : UITableViewController <UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchUsers;
 @property (nonatomic) NSArray *users;
-@property (nonatomic) BackendConnection *backendConnection;
+
 @end

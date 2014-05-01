@@ -7,7 +7,7 @@
 //
 
 #import "LoginViewController.h"
-#import "User.h"
+
 #import <Parse/Parse.h>
 @interface LoginViewController ()
 @end
@@ -50,8 +50,11 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    self.backendConnection = [BackendConnection getInstance];
-    [self.backendConnection setDelegate:self];
+
+    self.usernameTextField.layer.cornerRadius = 22;
+    self.passwordTextField.layer.cornerRadius = 22;
+    self.password2TextField.layer.cornerRadius = 22;
+    self.loginButton.layer.cornerRadius = 22;
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [self.passwordTextField setSecureTextEntry:NO];
     [self.passwordTextField setText:@"Password"];
@@ -125,26 +128,6 @@
     }
 }
 
--(void)userLoggedIn:(User *)user {
-    
-    if (user) {
-    [self performSegueWithIdentifier:@"logged in" sender:self];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-
-    NSString *userName = user.userName;
-    if (userName) {
-        [self performSegueWithIdentifier:@"logged in" sender:self];
-        NSString *userName = user.userName;
-        [prefs setObject:userName forKey:@"username"];
-    }else{
-        NSLog(@"could not log in");
-    }
-    } else {
-        NSLog(@"FAILED");
-        [self.loginButton setEnabled:YES];
-    }
-    
-}
 
 - (IBAction)loginButtonPressed:(UIButton *)sender {
     //[[BackendConnection getInstance] loginWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
@@ -204,26 +187,27 @@
 - (IBAction)newUserButtonPressed:(id)sender {
     
     if ([self.password2TextField isHidden]) {
+        //[self.loginButton setTitle:@"Create user and login" forState:UIControlStateNormal];
         self.password2TextField.hidden = NO;
         [UIView animateWithDuration:0.3 animations:^() {
             CGRect frame = self.loginButton.frame;
             CGRect frame2 = self.something.frame;
             
-            frame2.origin.y = frame2.origin.y + 65;
-            frame.origin.y = frame.origin.y + 65;
+            frame2.origin.y = frame2.origin.y + self.password2TextField.frame.size.height +8;
+            frame.origin.y = frame.origin.y + self.password2TextField.frame.size.height +8;
             [self.loginButton setFrame:frame];
             [self.something setFrame:frame2];
         }completion:^(BOOL finished) {
             if (finished) {
                 [UIView animateWithDuration:0.3 animations:^{
-                    self.password2TextField.alpha = 1.0;
+                    self.password2TextField.alpha = 0.5;
                 }];
             }
         }];
         
     } else{
         [UIView animateWithDuration:0.3 animations:^() {
-            self.password2TextField.alpha = 0.0;
+            self.password2TextField.alpha = 0.5;
         } completion:^(BOOL finished) {
             if (finished) {
                 self.password2TextField.hidden = YES;
@@ -231,10 +215,12 @@
                     CGRect frame = self.loginButton.frame;
                     CGRect frame2 = self.something.frame;
                     
-                    frame2.origin.y = frame2.origin.y - 65;
-                    frame.origin.y = frame.origin.y - 65;
+                    frame2.origin.y = frame2.origin.y - self.password2TextField.frame.size.height - 8;
+                    frame.origin.y = frame.origin.y - self.password2TextField.frame.size.height - 8;
                     [self.loginButton setFrame:frame];
                     [self.something setFrame:frame2];
+                    //[self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+                    
                 }];
             }
         }

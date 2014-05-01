@@ -13,7 +13,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
+    [[UITabBar appearance] setTintColor:[UIColor colorWithRed:17/255.0 green:168/255.0 blue:170/255.0 alpha:1.0]];
     [Parse setApplicationId:@"9VB1nTWjcRr4V7yxZGT88jsX65n2D3ZLGc7qL5uf"
                   clientKey:@"KnnMPDbRwaNLHcmKSENaCqP5Mvb3kivMuVOjOjS4"];
     
